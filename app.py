@@ -117,18 +117,17 @@ with st.expander("### 1. Idiosyncratic Risk ($V_i(t)$) Details"):
     st.subheader("Final Idiosyncratic Risk ($V_i(t)$)")
     st.markdown(f"**V_raw calculation:** `F_HC * (W_CR * F_CR + W_US * F_US)` (using default weights 0.4 and 0.6)")
     st.metric(label="Your Idiosyncratic Risk Score", value=f"{v_i:.2f}")
-
 # Systematic Risk Expander
 with st.expander("### 2. Systematic Risk ($H_i$) Details"):
     st.markdown("""
     This score accounts for macro-level risks inherent to an occupation, influenced by economic conditions and AI advancements.
     $$H_i = H_{base}(t) \cdot (w_{econ} \cdot M_{econ} + w_{inno} \cdot I_{AI})$$
     """)
-    
+
     st.subheader("Base Occupational Hazard ($H_{base}(t)$)")
-    st.markdown(r"$$H_{base}(k) = \left(1 - rac{k}{TTV}ight) \cdot H_{current} + \left(rac{k}{TTV}ight) \cdot H_{target}$$")
+    st.markdown(r"$$H_{base}(k) = \left(1 - \frac{k}{TTV}\right) \cdot H_{current} + \left(\frac{k}{TTV}\right) \cdot H_{target}$$")
     st.info(f"**Calculated H_base(t):** `{h_base_t:.2f}` (Adjusted for career transition over {months_elapsed_transition} months)")
-    
+
     st.subheader("Environmental Modifiers ($M_{econ}$, $I_{AI}$)")
     st.info(f"**Economic Climate Modifier (M_econ):** `{economic_climate_modifier:.2f}`")
     st.info(f"**AI Innovation Index (I_AI):** `{ai_innovation_index:.2f}`")
@@ -136,25 +135,26 @@ with st.expander("### 2. Systematic Risk ($H_i$) Details"):
     st.subheader("Final Systematic Risk ($H_i$)")
     st.metric(label="Your Systematic Risk Score", value=f"{h_i:.2f}")
 
+
 # Claim & Loss Calculation Expander
 with st.expander("### 3. Claim & Loss Calculation"):
     st.subheader("Total Payout Amount ($L_{payout}$)")
-    st.markdown(r"$$L_{payout} = rac{Annual\ Salary}{12} \cdot Coverage\ Duration \cdot Coverage\ Percentage$$")
+    st.markdown(r"$$L_{payout} = \frac{Annual\ Salary}{12} \cdot Coverage\ Duration \cdot Coverage\ Percentage$$")
     st.info(f"**Calculated L_payout:** `${l_payout:,.2f}`")
 
     st.subheader("Annual Claim Probability ($P_{claim}$)")
-    st.markdown(r"$$P_{claim} = \left(rac{H_i}{100} \cdot eta_{systemic}ight) \cdot \left(rac{V_i(t)}{100} \cdot eta_{individual}ight)$$")
+    st.markdown(r"$$P_{claim} = \left(\frac{H_i}{100} \cdot \eta_{systemic}\right) \cdot \left(\frac{V_i(t)}{100} \cdot \eta_{individual}\right)$$")
     st.info(f"**Calculated P_claim:** `{p_claim:.4f}`")
 
     st.subheader("Annual Expected Loss ($E[\text{Loss}]$)")
-    st.markdown(r"$$E[	ext{Loss}] = P_{claim} \cdot L_{payout}$$")
+    st.markdown(r"$$E[\text{Loss}] = P_{claim} \cdot L_{payout}$$")
     st.info(f"**Calculated E[Loss]:** `${e_loss:,.2f}`")
 
-st.markdown("## Final Monthly Premium")
-st.markdown("""
+st.markdown("## Final Monthly Premium\n ")
+st.markdown(r"""
 This is the final cost to you for the hypothetical AI-driven job displacement insurance. It ensures coverage for administrative costs and profit margins (through the Loading Factor) and meets a minimum policy viability threshold.
-$$P_{monthly} = \max\left(\frac{E[\text{Loss}] \cdot \lambda}{12}, P_{min}\right)$$
 """)
+st.markdown(r"$$ P_{monthly} = \max\left(\frac{E[\text{Loss}] \cdot \lambda}{12}, P_{min}\right) $$")
 
 col1, col2 = st.columns([1, 2])
 
